@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ReservaController {
 
-
         @FXML
         private Label lblInicio;
         @FXML
@@ -44,7 +43,7 @@ public class ReservaController {
         private final AtomicBoolean enEjecucion = new AtomicBoolean(false);
         private int numeroSimulacion = 0;
 
-        // ===== 3. Se ejecuta solo, al cargar la ventana =====
+        // Se ejecuta solo, al cargar la ventana
         @FXML
         private void initialize() {
             txtRegistro.setEditable(false);
@@ -53,11 +52,11 @@ public class ReservaController {
             lblRechazadas.setText("Rechazadas: 0");
         }
 
-        // ===== 4. Botón "Iniciar Registro" =====
+        // Botón "Iniciar Registro"
         @FXML
         private void onIniciarRegistro() {
             if (!enEjecucion.compareAndSet(false, true)) {
-                txtRegistro.appendText(">> Ya hay una simulación en curso. "
+                txtRegistro.appendText(" - Ya hay una simulación en curso. "
                         + "No se crearon agentes adicionales.\n");
                 return;
             }
@@ -90,14 +89,14 @@ public class ReservaController {
             supervisor.start();
         }
 
-        // ===== 5. Crea un hilo para un agente =====
+        // Crea un hilo para un agente
         private Thread crearAgente(String nombre, ProgressBar pb, Label lbl) {
             Thread hilo = new Thread(() -> procesarSolicitudes(nombre, pb, lbl), nombre);
             hilo.setDaemon(true);
             return hilo;
         }
 
-        // ===== 6. Trabajo de cada agente (segundo plano) =====
+        // Trabajo de cada agente en segundo plano
         private void procesarSolicitudes(String agente, ProgressBar pb, Label lbl) {
             for (int i = 1; i <= SolicitudesPorAgente; i++) {
                 try {
@@ -121,7 +120,7 @@ public class ReservaController {
             Platform.runLater(() -> lbl.setText(agente + " - Terminado"));
         }
 
-        // ===== 7. Muestra los contadores con su título =====
+        // Muestra los contadores con su título
         private void actualizarContadores() {
             EntradasCompartidas.Estado e = entradas.obtenerEstado();
             lblDisponibles.setText("Disponibles: " + e.disponibles());
@@ -129,7 +128,7 @@ public class ReservaController {
             lblRechazadas.setText("Rechazadas: " + e.rechazadas());
         }
 
-        // ===== 8. Verificación al terminar =====
+        // Verificación al terminar
         private void finalizarSimulacion() {
             actualizarContadores();
             EntradasCompartidas.Estado e = entradas.obtenerEstado();
@@ -151,7 +150,7 @@ public class ReservaController {
             enEjecucion.set(false);
         }
 
-        // ===== 9. Deja todo en cero antes de cada simulación =====
+        // Deja todo en 0 antes de cada simulacion.
         private void reiniciarInterfaz() {
             pbAgente1.setProgress(0);
             pbAgente2.setProgress(0);

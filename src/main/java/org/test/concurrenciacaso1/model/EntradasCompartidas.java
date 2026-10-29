@@ -12,29 +12,18 @@ public class EntradasCompartidas {
 
     private final Lock lock =  new ReentrantLock();
 
-    public boolean reservar(){
-        lock.lock();
-        try {
-            if (disponibles > 0)
-            {
-                disponibles--;
-                confirmadas++;
-                return true;
-            }
-            rechazadas++;
-            return false;
-        } finally {
-            lock.unlock();
+    public synchronized boolean reservar(){
+        if (disponibles > 0) {
+            disponibles--;
+            confirmadas++;
+            return true;
         }
+        rechazadas++;
+        return false;
     }
-    public Estado obtenerEstado(){
-        lock.lock();
-        try {
-            return new Estado(disponibles, confirmadas, rechazadas);
-        }
-        finally {
-            lock.unlock();
-        }
+
+    public synchronized Estado obtenerEstado(){
+        return new Estado(disponibles, confirmadas, rechazadas);
     }
     public record Estado(int disponibles, int confirmadas, int rechazadas)
     {
