@@ -10,8 +10,6 @@ public class EntradasCompartidas {
     private int confirmadas = 0;
     private int rechazadas = 0;
 
-    private final Lock lock =  new ReentrantLock();
-
     public synchronized boolean reservar(){
         if (disponibles > 0) {
             disponibles--;
